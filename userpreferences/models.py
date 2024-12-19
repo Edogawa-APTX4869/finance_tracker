@@ -1,7 +1,5 @@
 from djongo import models
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 
 def get_default_user():
     return User.objects.first().pk
