@@ -1,0 +1,132 @@
+{% extends "Extends/applicationMaster.html" %}
+{% load static %}
+
+{% block pageTitle %}
+    Finance Tracker - Add Incomes
+{% endblock %}
+
+{% block app %}
+<div class="container-fluid d-flex flex-column gap-2 mt-3">
+    <div class="align-items-center col-12 d-flex gap-5 justify-content-between">
+        <nav aria-label="breadcrumb" class="bg-primary-subtle col d-md-flex d-none p-2 rounded-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'incomes' %}">Incomes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Income</li>
+            </ol>
+        </nav>
+        <a href="{% url 'incomes' %}" class="btn btn-primary d-flex d-md-flex col-12 col-md-auto justify-content-center">Back</a>
+    </div>
+
+    <div class="card bg-white">
+        <div class="card-header">
+            Add Income
+        </div>
+        <div class="card-body">
+            <form id="incomeForm" action="{% url 'add-income' %}" method="POST">
+                <div class="mb-3">
+                    <label for="incomeSource" class="form-label">Income source</label>
+                    <select class="form-control" id="incomeSource" name="incomeSource">
+                        <option value="" selected>Select income source</option>
+                    </select>
+                    <div class="invalid-feedback" id="sourceError" style="display: none;">
+                        Please select a valid source.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="incomeAmount" class="form-label">Income amount</label>
+                    <input type="number" class="form-control" id="incomeAmount" name="incomeAmount" required>
+                    <div class="invalid-feedback" id="amountError" style="display: none;">
+                        Amount must be more than zero.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="incomeDate" class="form-label">Date of income</label>
+                    <input type="date" class="form-control" id="incomeDate" name="incomeDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary col-12 col-md-auto">Add Income</button>
+            </form>
+            {% if messages %}
+                <div class="mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+
+<script>
+    $(document).ready(function() {
+        var sources = {{ sources|default:"[]"|safe }};
+        
+        var incomeSource = $('#incomeSource').kendoDropDownList({
+                optionLabel: "Select income source",
+                dataTextField: "name",
+                dataValueField: "id",
+                dataSource: sources
+            });
+        var incomeAmount = $('#incomeAmount').kendoNumericTextBox({
+            format: '#.000 {{currency}}',
+            decimals: 3,
+            min: 0,
+            value: 0,
+            step: 1
+        });
+        var incomeDate = $('#incomeDate').kendoDatePicker({
+            format: 'dd-MM-yyyy',
+            value: new Date()
+        });
+
+        $('#incomeForm').submit(function(e) {
+            e.preventDefault();
+
+            var source = incomeSource.data('kendoDropDownList').value();
+            var amount = incomeAmount.data('kendoNumericTextBox').value();
+            var date = moment(incomeDate.data('kendoDatePicker').value()).format('YYYY-MM-DD');
+            var description = $('#description').val();
+
+            var isValid = true;
+            if (!source) {
+                $('#sourceError').show();
+                isValid = false;
+            } else $('#sourceError').hide();
+            if (amount <= 0) {
+                $('#amountError').show();
+                isValid = false;
+            } else $('#amountError').hide();
+            if (!isValid) {
+                return;
+            }
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    incomeSource: source,
+                    incomeAmount: amount,
+                    incomeDate: date,
+                    description: description
+                },
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = response.redirect;
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "Extends/master.html" %}
+{% load static %}
+
+{% comment %}In the master there will all need it extra styles{% endcomment %}
+{% block head %}
+    <link href="{% static 'assets/css/dashboard.css' %}" rel="stylesheet">
+
+    <link href="{% static 'kendo/classic-green.css' %}" rel="stylesheet">
+    <script src="{% static 'kendo/kendo.ui.core.min.js' %}"></script>
+    <script src="{% static 'moment/moment.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+    <header class="navbar bg-primary flex-md-nowrap p-0 shadow" data-bs-theme="light">
+        <div class="navbar-brand col-md-3 col-lg-2 px-3 text-white" href="#">Impact</div>
+        <div class="col-md-auto ms-auto d-flex justify-content-between align-items-center px-3 py-2">
+            <span class="text-white">Welcome, {{ user.username }}</span>
+            <ul class="navbar-nav flex-row d-md-none">
+                <li class="nav-item text-nowrap">
+                    <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <div class="container-fluid d-flex flex-column flex-grow-1">
+        <div class="row d-flex flex-md-grow-1 flex-lg-grow-1 ">
+            <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-white flex-grow-1">
+                <div class="offcanvas-md offcanvas-end bg-white" tabindex="-1" id="sidebarMenu"
+                     aria-labelledby="sidebarMenuLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="sidebarMenuLabel">Impact</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                data-bs-target="#sidebarMenu" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex  gap-2 {% if '/dashboard/' in request.path %}active{% endif %}"
+                                   aria-current="page" href="{% url 'dashboard' %}">
+                                    <i class="bi bi-graph-up"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex  gap-2 {% if '/incomes/' in request.path %}active{% endif %}"
+                                   aria-current="page" href="{% url 'incomes' %}">
+                                    <i class="bi bi-wallet2"></i>
+                                    Incomes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex gap-2 {% if '/expenses/' in request.path %}active{% endif %}"
+                                   aria-current="page" href="{% url 'expenses' %}">
+                                    <i class="bi bi-cash-stack"></i>
+                                    Expenses
+                                </a>
+                            </li>
+                        </ul>
+                        <hr class="my-3">
+                        <ul class="nav flex-column mb-auto">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex gap-2 {% if request.path == '/settings/' %}active{% endif %}"
+                                   aria-current="page" href="{% url 'settings' %}">
+                                    <i class="bi bi-gear-fill"></i> Settings
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex gap-2" href="{% url 'signOut' %}">
+                                    <i class="bi bi-box-arrow-left"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 d-flex flex-grow-1">
+                {% block app %}
+
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+{% endblock %}

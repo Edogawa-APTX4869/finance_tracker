@@ -1,0 +1,251 @@
+{% extends "Extends/applicationMaster.html" %}
+{% load static %}
+
+{% block pageTitle %}
+    Finance Tracker - Dashboard
+{% endblock %}
+
+{% block app %}
+<div class="container-fluid d-flex flex-column gap-3 mt-4">
+    <div class="row gap-2">
+        <div class="card bg-white           col-12 col-lg-auto ">
+                <div class="card-body">
+                    <h5 class="card-title">Available Balance</h5>
+                    <h2 class="card-text" id="availableBalance">{{ balance }} {{ currency }}</h2>
+                </div>
+    </div>
+        <div class="card bg-danger-subtle   col-12 col-lg-auto ">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center gap-3">
+                        <h5 class="card-title mb-0">Expenses</h5>
+                        <label for="expensesFilter"></label>
+                        <select id="expensesFilter" class="form-select w-auto">
+                            <option value="this_month" selected>This Month</option>
+                            <option value="whole">Whole Expenses</option>
+                            <option value="30_days">Last 30 Days</option>
+                            <option value="7_days">Last 7 Days</option>
+                            <option value="today">Today</option>
+                        </select>
+                    </div>
+                    <h2 class="card-text mt-2" id="expensesAmount">{{ expenses_this_month }} {{ currency }}</h2>
+                </div>
+            </div>
+        <div class="card bg-success-subtle  col-12 col-lg-auto ">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center gap-3">
+                        <h5 class="card-title mb-0">Incomes</h5>
+                        <label for="incomesFilter"></label>
+                        <select id="incomesFilter" class="form-select w-auto">
+                            <option value="this_month" selected>This Month</option>
+                            <option value="whole">Whole Incomes</option>
+                            <option value="30_days">Last 30 Days</option>
+                            <option value="7_days">Last 7 Days</option>
+                            <option value="today">Today</option>
+                        </select>
+                    </div>
+                    <h2 class="card-text mt-2" id="incomesAmount">{{ incomes_this_month }} {{ currency }}</h2>
+                </div>
+            </div>
+    </div>
+    <div class="row gap-2">
+        <div class="card bg-white col-12 col-lg">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center gap-3">
+                        <h5 class="card-title mb-0">Sources Income</h5>
+                        <label for="chartFilterSI"></label>
+                        <select id="chartFilterSI" class="form-select w-auto">
+                            <option value="this_month" selected>This Month</option>
+                            <option value="whole">Whole Expenses</option>
+                            <option value="30_days">Last 30 Days</option>
+                            <option value="7_days">Last 7 Days</option>
+                            <option value="today">Today</option>
+                        </select>
+                    </div>
+                    <canvas id="sourcesIncomeChart"></canvas>
+                </div>
+    </div>
+        <div class="card bg-white col-12 col-lg-auto">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center gap-3">
+                    <h5 class="card-title mb-0">Category Expenses</h5>
+                    <label for="chartFilterCE"></label>
+                    <select id="chartFilterCE" class="form-select w-auto">
+                        <option value="this_month" selected>This Month</option>
+                        <option value="whole">Whole Expenses</option>
+                        <option value="30_days">Last 30 Days</option>
+                        <option value="7_days">Last 7 Days</option>
+                        <option value="today">Today</option>
+                    </select>
+                </div>
+                <canvas id="categoryExpensesChart"></canvas>
+            </div>
+        </div>
+        <div class="card bg-white col-12">
+            <div class="card-body">
+                <h5 class="card-title mb-0">Weekly Balance</h5>
+                <canvas id="weeklyBalanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#expensesFilter').change(function() {
+                var filter = $(this).val();
+                $.ajax({
+                    url: '{% url "get_expenses" %}',
+                    data: {
+                        'filter': filter
+                    },
+                    success: function(data) {
+                        var formattedExpenses = parseFloat(data.expenses).toFixed(3);
+                        $('#expensesAmount').text(formattedExpenses + ' {{ currency }}');
+                    }
+                });
+            });
+            $('#incomesFilter').change(function() {
+                var filter = $(this).val();
+                $.ajax({
+                    url: '{% url "get_incomes" %}',
+                    data: {
+                        'filter': filter
+                    },
+                    success: function(data) {
+                        var formattedIncomes = parseFloat(data.incomes).toFixed(3);
+                        $('#incomesAmount').text(formattedIncomes + ' {{ currency }}');
+                    }
+                });
+            });
+
+
+            let categoryExpensesChart;
+            $('#chartFilterCE').change(function () {
+                const filter = $(this).val();
+
+                // Fetch data from the server
+                $.ajax({
+                    url: '{% url "get_category_expenses" %}', // Replace with your URL
+                    data: { filter: filter },
+                    success: function (data) {
+                        const xValues = data.xValues;
+                        const yValues = data.yValues;
+
+                        // Destroy the old chart if it exists
+                        if (categoryExpensesChart) {
+                            categoryExpensesChart.destroy();
+                        }
+
+                        // Create a new chart
+                        const ctx = document.getElementById("categoryExpensesChart").getContext("2d");
+                        categoryExpensesChart = new Chart(ctx, {
+                            type: "doughnut", // You can change this to "line", "pie", etc.
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                    label: "Expenses by Category",
+                                    data: yValues,
+                                }],
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                    error: function () {
+                        alert("An error occurred while fetching data.");
+                    },
+                });
+            });
+            $('#chartFilterCE').trigger('change');
+
+            let sourcesIncomeChart;
+            $('#chartFilterSI').change(function () {
+                const filter = $(this).val();
+
+                // Fetch data from the server
+                $.ajax({
+                    url: '{% url "get_income_sources" %}',
+                    data: { filter: filter },
+                    success: function (data) {
+                        const xValues = data.xValues;
+                        const yValues = data.yValues;
+
+                        // Destroy the old chart if it exists
+                        if (sourcesIncomeChart) {
+                            sourcesIncomeChart.destroy();
+                        }
+
+                        // Create a new chart
+                        const ctx = document.getElementById("sourcesIncomeChart").getContext("2d");
+                        sourcesIncomeChart = new Chart(ctx, {
+                            type: "bar", // You can change this to "line", "pie", etc.
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                    label: "Income by sources",
+                                    data: yValues,
+                                }],
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                    error: function () {
+                        alert("An error occurred while fetching data.");
+                    },
+                });
+            });
+            $('#chartFilterSI').trigger('change');
+
+            let weeklyBalanceChart;
+            $.ajax({
+            url: '{% url "get_weekly_balance" %}',
+            success: function (data) {
+                const labels = data.balances.map(item => item.date);
+                const balances = data.balances.map(item => item.balance);
+
+                // Create a new chart
+                const ctx = document.getElementById("weeklyBalanceChart").getContext("2d");
+                weeklyBalanceChart = new Chart(ctx, {
+                    type: "line", // You can change this to "bar", "pie", etc.
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Balance",
+                            data: balances,
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                });
+            },
+            error: function () {
+                alert("An error occurred while fetching data.");
+            },
+        });
+
+        });
+    </script>
+{% endblock %}

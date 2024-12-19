@@ -1,0 +1,46 @@
+
+
+class Income(models.Model):
+    class Source(models.TextChoices):
+        SALARY = 'SAL', _('Salary')
+        BUSINESS = 'BUS', _('Business')
+        INVESTMENT = 'INV', _('Investment')
+        OTHER = 'OTH', _('Other')
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user())
+    amount = models.DecimalField(max_digits=10, decimal_places=3, null=False, blank=False)
+    source = models.CharField(
+        max_length=3,
+        choices=Source.choices,
+        default=Source.OTHER,
+        null=False,
+        blank=False
+    )
+    description = models.TextField(null=True, blank=True)
+    date = models.DateField(auto_now_add=True)
+
+    def clean(self):
+        if self.amount <= 0:
+            raise ValidationError(_("The income amount must be greater than zero."))
+        if not self.source:
+            raise ValidationError(_("A valid income source must be selected."))
+
+    def __str__(self):
+        return f"{self.source} - {self.description}"
+
+
+
+
+
+
+    path('incomes/', views.dashboard, name='incomes'),
+    path('expenses/', views.dashboard, name='expenses'),
+
+
+@login_required
+def expenses(request):
+    return render(request, 'App/02-Expense.html')
+
+@login_required
+def incomes(request):
+    return render(request, 'App/03-Income.html')

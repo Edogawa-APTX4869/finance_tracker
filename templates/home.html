@@ -1,0 +1,300 @@
+{% extends "Extends/master.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+{% endblock %}
+
+{% block pageTitle %}
+    Finance Tracker - Home
+{% endblock %}
+
+{% block content %}
+    <header id="header" class="header fixed-top">
+        <div class="branding d-flex align-items-center">
+            <div class="container position-relative d-flex align-items-center justify-content-between">
+                <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                    <h1 class="sitename">Impact</h1>
+                    <span>.</span>
+                </a>
+
+                <nav id="navmenu" class="navmenu">
+                    <ul>
+                        <li><a href="#hero" class="active">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li>
+                            <button type="button" class="btn btn-light mb-2 mb-lg-0 mx-3 mx-lg-0" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">Login
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="btn btn-light mx-3 mx-lg-0" data-bs-toggle="modal"
+                                    data-bs-target="#signupModal">SignUp
+                            </button>
+                        </li>
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <!-- Hero Section -->
+        <section id="hero" class="hero section accent-background">
+            <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
+                {% include 'Extends/_messages.html' %}
+                <div class="row gy-5 justify-content-between">
+                    <div class="col-lg-5 order-1 order-lg-2">
+                        <img src="{% static 'assets/img/hero-img.svg' %}" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                        <h2> Take Control of Your Financial Journey with Impact </h2>
+                        <p>Impact is your personal finance companion, empowering you to manage your income, expenses,
+                            and savings effortlessly. With real-time tracking and insightful visualizations, it’s never
+                            been easier to achieve your financial goals.</p>
+                        <div class="d-flex">
+                            <button href="#" class="btn-get-started">Sign up now for free! </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="icon-boxes position-relative" data-aos="fade-up" data-aos-delay="200">
+                <div class="container position-relative">
+                    <div class="row gy-4 mt-5">
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="icon-box">
+                                <div class="icon"><i class="bi bi-transparency"></i></div>
+                                <h4 class="title"><a href="#" onclick="return false;" class="stretched-link">Transparency</a>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="icon-box">
+                                <div class="icon"><i class="bi bi-command"></i></div>
+                                <h4 class="title"><a href="#" onclick="return false;"
+                                                     class="stretched-link">Simplicity</a></h4>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="icon-box">
+                                <div class="icon"><i class="bi bi-trophy-fill"></i></div>
+                                <h4 class="title"><a href="" onclick="return false;"
+                                                     class="stretched-link">Empowerment</a></h4>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6">
+                            <div class="icon-box">
+                                <div class="icon"><i class="bi bi-shield-fill-check"></i></div>
+                                <h4 class="title"><a href="" onclick="return false;" class="stretched-link">Security</a>
+                                </h4>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Call To Action Section -->
+        <section id="call-to-action" class="call-to-action section dark-background">
+
+            <div class="container">
+                <img src="{% static 'assets/img/business-analysis.jpg' %}" alt="">
+                <div class="content row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="col-xl-10">
+                        <div class="text-center">
+                            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox play-btn"></a>
+                            <h3>Getting Started with Impact</h3>
+                            <p>Learn how to register, navigate features, and manage your finances effectively with
+                                Impact in this step-by-step video guide.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="services section">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+                <h2>List of Benefits</h2>
+            </div><!-- End Section Title -->
+
+            <div class="container">
+
+                <div class="row gy-4">
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="service-item  position-relative">
+                            <div class="icon">
+                                <i class="bi bi-activity"></i>
+                            </div>
+                            <h3>Track Every Dinar</h3>
+                            <p>Monitor your income and expenses in real time.</p>
+                        </div>
+                    </div><!-- End Service Item -->
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                        <div class="service-item position-relative">
+                            <div class="icon">
+                                <i class="bi bi-easel"></i>
+                            </div>
+                            <h3>Insightful Visuals</h3>
+                            <p>Easy-to-read charts and reports help you make informed decisions.</p>
+                        </div>
+                    </div><!-- End Service Item -->
+
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                        <div class="service-item position-relative">
+                            <div class="icon">
+                                <i class="bi bi-window-stack"></i>
+                            </div>
+                            <h3>Anywhere, Anytime Access</h3>
+                            <p>Use Impact on any device with seamless integration.</p>
+                        </div>
+                    </div><!-- End Service Item -->
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer id="footer" class="footer accent-background pb-3">
+        <div class="container footer-top">
+            <div class="row gy-4 mb-2">
+                <div class="col-lg-6 col-md-12 footer-about">
+                    <a href="#" class="logo d-flex align-items-center">
+                        <span class="sitename">Impact</span>
+                    </a>
+                    <p>your personal finance companion, empowering you to manage your income, expenses, and savings
+                        effortlessly. With real-time tracking and insightful visualizations, it’s never been easier to
+                        achieve your financial goals.</p>
+                </div>
+
+                <div class="col-lg-3 col-6 footer-links">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Services</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-6 footer-links">
+                    <h4>List of Benefits</h4>
+                    <ul>
+                        <li><a href="#">Track Every Dinar</a></li>
+                        <li><a href="#">Insightful Visuals</a></li>
+                        <li><a href="#">Anywhere, Anytime Access</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Preloader -->
+    <div id="preloader"></div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{% url 'login' %}">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" name="username" class="form-control" id="username"
+                                   aria-describedby="userHelp" required>
+                            <div id="userHelp" class="form-text">Username doesn't allow spacing. e.g: user001</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" id="loginPassword" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary ps-4 pe-4">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{% url 'signup' %}" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" name="username" class="form-control" id="username"
+                                   placeholder="Create username (only letters and numbers)" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" name="firstName" class="form-control" id="firstName" placeholder="Hasan"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" name="lastName" class="form-control" id="lastName" placeholder="Ali"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailAddress" class="form-label">Email Address</label>
+                            <input type="text" name="emailAddress" class="form-control" id="emailAddress" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" id="password"
+                                   placeholder="create a password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm your Password</label>
+                            <input type="password" name="confirmPassword" class="form-control"
+                                   placeholder="confirm the password" id="confirmPassword" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary ps-4 pe-4">Signup</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'assets/JS/main.js' %}"></script>
+
+    <script>
+    $(document).ready(function(){
+        $(".btn-get-started").off('click').on('click', function () {
+            $("#signupModal").modal("show");
+        });
+    });
+
+
+    </script>
+
+
+{% endblock %}

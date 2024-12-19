@@ -1,0 +1,132 @@
+{% extends "Extends/applicationMaster.html" %}
+{% load static %}
+
+{% block pageTitle %}
+    Finance Tracker - Add Expenses
+{% endblock %}
+
+{% block app %}
+<div class="container-fluid d-flex flex-column gap-2 mt-3">
+    <div class="align-items-center col-12 d-flex gap-5 justify-content-between">
+        <nav aria-label="breadcrumb" class="bg-primary-subtle col d-md-flex d-none p-2 rounded-2">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Add Expenses</li>
+            </ol>
+        </nav>
+        <a href="{% url 'expenses' %}" class="btn btn-primary d-flex d-md-flex col-12 col-md-auto justify-content-center">Back</a>
+    </div>
+
+    <div class="card bg-white">
+        <div class="card-header">
+            Add Expense
+        </div>
+        <div class="card-body">
+            <form id="expenseForm" action="{% url 'add-expenses' %}" method="POST">
+                <div class="mb-3">
+                    <label for="expenseCategory" class="form-label">Expense Category</label>
+                    <select class="form-control" id="expenseCategory" name="expenseCategory">
+                        <option value="" selected>Select Expense Category</option>
+                    </select>
+                    <div class="invalid-feedback" id="categoryError" style="display: none;">
+                        Please select a valid category.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="expenseAmount" class="form-label">Expense Amount</label>
+                    <input type="number" class="form-control" id="expenseAmount" name="expenseAmount" required>
+                    <div class="invalid-feedback" id="amountError" style="display: none;">
+                        Amount must be more than zero.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="expenseDate" class="form-label">Date of Expense</label>
+                    <input type="date" class="form-control" id="expenseDate" name="expenseDate" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary col-12 col-md-auto">Add Expense</button>
+            </form>
+            {% if messages %}
+                <div class="mt-3">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+
+<script>
+    $(document).ready(function() {
+        var categories = {{ categories|safe }};
+
+        var expenseCategory = $('#expenseCategory').kendoDropDownList({
+                optionLabel: "Select Expense Category",
+                dataTextField: "name",
+                dataValueField: "id",
+                dataSource: categories
+            });
+        var expenseAmount = $('#expenseAmount').kendoNumericTextBox({
+            format: '#.000 {{currency}}',
+            decimals: 3,
+            min: 0,
+            value: 0,
+            step: 1
+        });
+        var expenseDate = $('#expenseDate').kendoDatePicker({
+            format: 'dd-MM-yyyy',
+            value: new Date()
+        });
+
+        $('#expenseForm').submit(function(e) {
+            e.preventDefault();
+
+            var category = expenseCategory.data('kendoDropDownList').value();
+            var amount = expenseAmount.data('kendoNumericTextBox').value();
+            var date = moment(expenseDate.data('kendoDatePicker').value()).format('YYYY-MM-DD');
+            var description = $('#description').val();
+
+            var isValid = true;
+            if (!category) {
+                $('#categoryError').show();
+                isValid = false;
+            } else $('#categoryError').hide();
+            if (amount <= 0) {
+                $('#amountError').show();
+                isValid = false;
+            } else $('#amountError').hide();
+            if (!isValid) {
+                return;
+            }
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    expenseCategory: category,
+                    expenseAmount: amount,
+                    expenseDate: date,
+                    description: description
+                },
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = response.redirect;
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+{% endblock %}

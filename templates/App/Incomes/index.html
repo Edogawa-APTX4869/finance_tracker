@@ -1,0 +1,99 @@
+{% extends "Extends/applicationMaster.html" %}
+{% load static %}
+
+{% block pageTitle %}
+    Finance Tracker -  My Incomes
+{% endblock %}
+
+
+{% block app %}
+
+<div class="container-fluid d-flex flex-column flex-grow-1 gap-3 my-3">
+    <div class="row">
+        <div class="align-items-center col-12 d-flex gap-5 justify-content-between">
+            <nav aria-label="breadcrumb" class="bg-primary-subtle col d-md-flex d-none p-2 rounded-2">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="#">Incomes</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Incomes</li>
+              </ol>
+            </nav>
+            <a href="{% url 'add-income' %}" class="btn btn-primary d-flex d-md-flex col-12 col-md-auto justify-content-center">Add Income</a>
+        </div>
+    </div>
+    <div class="table-responsive bg-white rounded p-3 flex-grow-1 overflow-auto">
+        {% include 'Extends/_messages.html' %}
+        <table class="table table-striped table-hover rounded-2 overflow-hidden ">
+            <thead class="thead-light">
+                <tr>
+                    <th>Income Source</th>
+                    <th>Amount ({{ currency }})</th>
+                    <th>Date</th>
+                    <th class="d-none d-md-table-cell">Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if incomes|length == 0 %}
+                    <tr>
+                        <td colspan="5" class="text-center">No incomes record have been added yet.</td>
+                    </tr>
+                {% endif %}
+                {% for income in page_obj %}
+                    <tr>
+                        <td class="align-content-center">{{ income.category_name }}</td>
+                        <td class="align-content-center">{{ income.amount }}</td>
+                        <td class="align-content-center">{{ income.date|date:"d/m/Y" }}</td>
+                        <td class="align-content-center d-none d-md-table-cell">{{ income.description }}</td>
+                        <td>
+                            <div class="d-flex flex-column flex-md-row gap-2">
+                                <a href="{% url 'edit-income' income.id %}" class="btn btn-primary btn-sm w-100 w-md-auto">Edit</a>
+                                <a href="{% url 'delete-income' income.id %}" class="btn btn-danger btn-sm w-100 w-md-auto text-white">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="align-items-baseline d-flex gap-2 justify-content-start">
+            <p class="ms-3 mb-0">Showing page</p>
+            <nav aria-label="Page navigation example">
+            <ul class="pagination
+                {% if page_obj.has_previous %}
+                    pagination-sm
+                {% endif %}
+            ">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" tabindex="-1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                {% endif %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a>
+                </li>
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block content %}
+    {{ block.super }}
+{% endblock %}

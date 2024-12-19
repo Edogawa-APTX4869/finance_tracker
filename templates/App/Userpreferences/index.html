@@ -1,0 +1,40 @@
+{% extends 'Extends/applicationMaster.html' %}
+{% load static %}
+
+{% block pageTitle %}
+    Finance Tracker - User Preferences
+{% endblock %}
+
+
+{% block app %}
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-12">
+                <label for="currency" class="fs-3 fw-normal">Preferred Currency</label>
+                <hr/>
+                {% include 'Extends/_messages.html' %}
+                <form action="{% url 'settings' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <select name="currency" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                            <option>Choose...</option>
+                            {% for currency in currencies %}
+                                <option value="{{ currency.name }}" {% if currency.name == user_currency %}selected{% endif %}>
+                                    {{ currency.name }} - {{ currency.value }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <input class="btn btn-outline-primary" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block content %}
+    {{ block.super }}
+{% endblock %}
