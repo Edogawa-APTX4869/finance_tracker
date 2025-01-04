@@ -36,19 +36,22 @@ To run the project locally, follow these steps:
    ```bash
    git clone https://github.com/your-username/finance-tracker.git
    ```
-
-2. Install all Required incandescent from requirements.txt
+2. Create a virtual environment and activate it with python 3.9:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+3. Install all Required incandescent from requirements.txt
    ```bash
    pip install -r requirements.txt
     ```
-   
-3. Make sure you have MongoDB installed and running on your local machine.
-4. Make migrations and migrate the database:
+4. Make sure you have MongoDB installed and running on your local machine.
+5. Make migrations and migrate the database:
    ```bash
    python manage.py makemigrations
    python manage.py migrate
    ```
-5. Run the server:
+6. Run the server:
    ```bash
    python manage.py runserver
    ```
