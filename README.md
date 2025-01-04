@@ -58,5 +58,8 @@ To run the project locally, follow these steps:
    ```bash
    python manage.py runserver
    ```
+   
+
+Note: I've test running by using CMD and it works fine.
 
 Feel free to check it and reach me anytime.
