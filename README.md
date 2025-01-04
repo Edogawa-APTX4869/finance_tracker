@@ -38,11 +38,11 @@ To run the project locally, follow these steps:
    ```
 2. Create a virtual environment and activate it with python 3.9:
    ```bash
-   python3 -m venv venv
+   python -m venv venv
    ```
-3. using the following command in cmd `windows` to activate the virtual environment:
+3. using the following command in `windows` to activate the virtual environment:
    ```bash
-   activate   
+   .\venv\Scripts\activate   
 
 4. Install all Required incandescent from requirements.txt
    ```bash
