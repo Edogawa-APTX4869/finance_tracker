@@ -39,19 +39,22 @@ To run the project locally, follow these steps:
 2. Create a virtual environment and activate it with python 3.9:
    ```bash
    python3 -m venv venv
-   source venv/bin/activate
    ```
-3. Install all Required incandescent from requirements.txt
+3. using the following command in cmd `windows` to activate the virtual environment:
+   ```bash
+   activate   
+
+4. Install all Required incandescent from requirements.txt
    ```bash
    pip install -r requirements.txt
     ```
-4. Make sure you have MongoDB installed and running on your local machine.
-5. Make migrations and migrate the database:
+5. Make sure you have MongoDB installed and running on your local machine.
+6. Make migrations and migrate the database:
    ```bash
    python manage.py makemigrations
    python manage.py migrate
    ```
-6. Run the server:
+7. Run the server:
    ```bash
    python manage.py runserver
    ```
