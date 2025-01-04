@@ -60,6 +60,8 @@ To run the project locally, follow these steps:
    ```
    
 
-Note: I've test running by using CMD and it works fine.
+Note: I've test running by using CMD, and it works fine.
+
+**Python that been used is 3.9.13** 
 
 Feel free to check it and reach me anytime.
