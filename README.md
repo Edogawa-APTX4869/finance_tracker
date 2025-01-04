@@ -35,18 +35,22 @@ To run the project locally, follow these steps:
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/finance-tracker.git
+   ```
 
-2. Install all Required depandinces if ot installed:
-  - asgiref==3.8.1
-  - Django==3.1.12
-  - djongo==1.3.7
-  - pymongo==3.11.4
-  - pytz==2024.2
-  - sqlparse==0.2.4
-  - typing_extensions==4.12.2
-  - Python 3.9.13
-
-3. Add the exists MongoDB file
-
+2. Install all Required incandescent from requirements.txt
+   ```bash
+   pip install -r requirements.txt
+    ```
+   
+3. Make sure you have MongoDB installed and running on your local machine.
+4. Make migrations and migrate the database:
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+5. Run the server:
+   ```bash
+   python manage.py runserver
+   ```
 
 Feel free to check it and reach me anytime.
