@@ -19,7 +19,7 @@ class Source(models.Model):
         return self.name
 
 class Income(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user())
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user)
     source = models.ForeignKey(Source, on_delete=models.CASCADE, null=True, blank=False)
     amount = models.DecimalField(max_digits=10, decimal_places=3, null=False, blank=False)
     description = models.TextField(null=True, blank=True)  # Optional

@@ -6,7 +6,7 @@ def get_default_user():
 
 # Create your models here.
 class userPreferences(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user())
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user)
     currency = models.CharField(max_length=3, null= True , default='BHD')
     date = models.DateField(auto_now_add=True)
 

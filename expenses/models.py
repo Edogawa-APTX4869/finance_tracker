@@ -19,7 +19,7 @@ class Category(models.Model):
         return self.name
 
 class Expense(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user())
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=get_default_user)
     amount = models.DecimalField(max_digits=10, decimal_places=3, null=False, blank=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=False)
     description = models.TextField(null=True, blank=True)  # Optional
